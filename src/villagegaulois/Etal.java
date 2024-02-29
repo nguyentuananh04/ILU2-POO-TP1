@@ -1,5 +1,7 @@
 package villagegaulois;
 
+import java.util.Iterator;
+
 import personnages.Gaulois;
 
 public class Etal {
@@ -8,6 +10,84 @@ public class Etal {
 	private int quantiteDebutMarche;
 	private int quantite;
 	private boolean etalOccupe = false;
+	
+	private static class Marche {
+		private Etal[] etals;
+		
+		public Marche(int nombreEtals) {
+			etals = new Etal[nombreEtals];
+			
+			for(int i = 0; i < nombreEtals; i++) {
+				etals[i] = new Etal();
+			}
+		}
+		
+		public void utiliserEtal(int indiceEtal, Gaulois vendeur, String produit, int nbProduit) {
+			if(indiceEtal >= 0 && indiceEtal < etals.length) {
+				etals[indiceEtal].occuperEtal(vendeur, produit, nbProduit);
+			}
+			else {
+				System.out.println("L'indice de l'étal est invalide.");
+			}
+		}
+		
+		public int trouverEtalLibre() {
+			for(int i = 0; i < etals.length; i++) {
+				if(!(etals[i].isEtalOccupe()))
+						return i;
+			}
+			
+			return -1;
+		}
+		
+		public Etal[] trouverEtal(String produit) {
+			Etal[] etalsAProduit = new Etal[etals.length];
+			
+			int countEtals = 0;
+			int countEtalsAProduit = 0;
+			
+			while(countEtals < etals.length) {
+				if(etals[countEtals].contientProduit(produit)) {
+					etalsAProduit[countEtalsAProduit] = etals[countEtals];
+					countEtalsAProduit++;
+				}
+				countEtals++;
+			}
+			
+			return etalsAProduit;
+		}
+		
+		public Etal trouverVendeur(Gaulois gaulois) {
+			for (int i = 0; i < etals.length; i++) {
+				 if (etals[i].getVendeur() == gaulois) {
+					return etals[i];
+				}
+			}
+			
+			return null;
+		}
+		
+		public void afficherMarche() {
+			StringBuilder chaine = new StringBuilder();
+			int nbEtalsVides = 0;
+			
+			for (int i = 0; i < etals.length; i++) {
+				if (etals[i].isEtalOccupe()) {
+					chaine.append(etals[i].afficherEtal());
+				}
+				else {
+					nbEtalsVides++;
+				}
+			}
+			
+			if (nbEtalsVides > 0) {
+				chaine.append("Il reste " + nbEtalsVides + " étals non utilisés dans le marché.\n");
+			}
+			
+			System.out.println(chaine.toString());
+		}
+	}
+	
 
 	public boolean isEtalOccupe() {
 		return etalOccupe;

@@ -1,5 +1,6 @@
 package villagegaulois;
 
+import villagegaulois.Etal;
 import personnages.Chef;
 import personnages.Gaulois;
 
@@ -68,8 +69,31 @@ public class Village {
 		return chaine.toString();
 	}
 	
-	 public String rechercherVendeursProduit(String produit) {
+	public String rechercherVendeursProduit(String produit) {
+		StringBuilder chaine = new StringBuilder();
+		String[] vendeursProduit = new String[marche.length];
+		int count = 0;
+		for (int i = 0; i < marche.length; i++) {
+			if (marche[i].contientProduit(produit)) {
+				vendeursProduit[count - 1] = marche[i].getVendeur().getNom();
+				count++;
+			}
+		}
+		if (count == 0) {
+			chaine.append("Il n'y a pas de vendeur qui propose des " + produit + " au marché.\n");
+		}
+		else if(count == 1) {
+			chaine.append("Seul le vendeur " + vendeursProduit[0] + " proppose des " + produit + " au marché.\n");
+		}
+		else {
+			chaine.append("Les vendeurs qui proposent des " + produit + "s sont:\n");
+			for (int i = 0; i < vendeursProduit.length; i++) {
+				chaine.append("- " + vendeursProduit[i] + "\n");
+			}
+		}
+			
 		 
+		return chaine.toString();
 	 }
 
 }
